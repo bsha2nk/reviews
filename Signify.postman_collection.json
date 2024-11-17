@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "ae7892dc-01cd-42b6-b377-5353d3e6360c",
+		"name": "Signify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38658400"
+	},
+	"item": [
+		{
+			"name": "Add review",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"review\": \"When I know more I will let you know\",\r\n    \"author\": \"Michael Sedlmayer\",\r\n    \"review_source\": \"GooglePlayStore\",\r\n    \"rating\": 5,\r\n    \"title\": \"\",\r\n    \"product_name\": \"Amazon Alexa\",\r\n    \"reviewed_date\": \"2017-11-28T00:00:00.000Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Reviews",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Review By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Reviews",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews?rating=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews"
+					],
+					"query": [
+						{
+							"key": "rating",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average rating by Store Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews/average-rating/store-type/GooglePlayStore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews",
+						"average-rating",
+						"store-type",
+						"GooglePlayStore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Average rating by Store Type Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/reviews/total-ratings/store-type/GooglePlayStore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"reviews",
+						"total-ratings",
+						"store-type",
+						"GooglePlayStore"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
