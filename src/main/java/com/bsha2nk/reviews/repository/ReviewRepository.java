@@ -41,6 +41,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, QueryB
 			ORDER BY
 				rating DESC
 			""", nativeQuery = true)
-	public List<TotalRatingProjection> findTotalRatingsByStoreType();
+	public List<TotalRatingProjection> findTotalRatings();
 
 }
