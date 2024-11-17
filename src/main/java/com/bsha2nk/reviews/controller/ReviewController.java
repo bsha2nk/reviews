@@ -17,6 +17,7 @@ import com.bsha2nk.reviews.dto.ReviewRequestDTO;
 import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.entity.Review;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
+import com.bsha2nk.reviews.projection.TotalRatingProjection;
 import com.bsha2nk.reviews.service.ReviewService;
 import com.bsha2nk.reviews.util.StoreType;
 
@@ -57,6 +58,11 @@ public class ReviewController {
 	@GetMapping("/average-rating/store-type/{storeType}")
 	public ResponseEntity<List<MonthlyRatingProjection>> getAverageRating(@PathVariable StoreType storeType) {
 		return ResponseEntity.ok(reviewService.getAverageRatingByStoreType(storeType));
+	}
+	
+	@GetMapping("/total-ratings/store-type/{storeType}")
+	public ResponseEntity<List<TotalRatingProjection>> getTotalRatings(@PathVariable StoreType storeType) {
+		return ResponseEntity.ok(reviewService.getTotalRatingsByStoreType(storeType));
 	}
 	
 }
