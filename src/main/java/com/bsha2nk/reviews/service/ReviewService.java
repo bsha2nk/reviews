@@ -69,8 +69,18 @@ public class ReviewService {
 		return reviewRepository.findAverageRatingByStoreType(storeType.toString()); 
 	}
 	
-	public List<TotalRatingProjection> getTotalRatingsByStoreType(StoreType storeType) {
-		return reviewRepository.findTotalRatingsByStoreType(storeType.toString());
+	public List<TotalRatingProjection> getTotalRatingsByStoreType() {
+		return reviewRepository.findTotalRatingsByStoreType();
+	}
+	
+	public List<ReviewResponseDTO> createMultipleReviews(List<ReviewRequestDTO> requestDTOs) {
+		List<ReviewResponseDTO> reviewResponseDTOs = new ArrayList<>();
+		
+		for (ReviewRequestDTO requestDTO : requestDTOs) {
+			reviewResponseDTOs.add(createReview(requestDTO));
+		}
+		
+		return reviewResponseDTOs;
 	}
 
 }

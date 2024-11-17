@@ -1,6 +1,6 @@
 package com.bsha2nk.reviews.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.bsha2nk.reviews.util.StoreType;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,6 +27,6 @@ public class ReviewRequestDTO {
 	private String productName;
 	
 	@JsonProperty("reviewed_date")
-	private LocalDate reviewedDate;
+	private LocalDateTime reviewedDate;
 	
 }

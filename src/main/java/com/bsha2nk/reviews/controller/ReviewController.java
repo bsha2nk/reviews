@@ -1,8 +1,9 @@
 package com.bsha2nk.reviews.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<ReviewResponseDTO>> getAllReviews(@RequestParam(required = false) LocalDate date,
+	public ResponseEntity<List<ReviewResponseDTO>> getAllReviews(@RequestParam(required = false) LocalDateTime date,
 																@RequestParam(required = false) StoreType storeType,
 																@RequestParam(required = false) Integer rating) {
 		Review reviewFilterCriteria = Review.builder()
@@ -60,9 +61,15 @@ public class ReviewController {
 		return ResponseEntity.ok(reviewService.getAverageRatingByStoreType(storeType));
 	}
 	
-	@GetMapping("/total-ratings/store-type/{storeType}")
-	public ResponseEntity<List<TotalRatingProjection>> getTotalRatings(@PathVariable StoreType storeType) {
-		return ResponseEntity.ok(reviewService.getTotalRatingsByStoreType(storeType));
+	@GetMapping("/total-ratings")
+	public ResponseEntity<List<TotalRatingProjection>> getTotalRatings() {
+		return ResponseEntity.ok(reviewService.getTotalRatingsByStoreType());
+	}
+	
+	@PostMapping("/multiple")
+	public ResponseEntity<List<ReviewResponseDTO>> createMultipleReviews(@RequestBody List<ReviewRequestDTO> reviewRequestDTOs) {
+		List<ReviewResponseDTO> reviewResponseDTOs = reviewService.createMultipleReviews(reviewRequestDTOs);
+		return new ResponseEntity<List<ReviewResponseDTO>>(reviewResponseDTOs, HttpStatus.CREATED);
 	}
 	
 }

@@ -1,6 +1,6 @@
 package com.bsha2nk.reviews.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.bsha2nk.reviews.util.StoreType;
 
@@ -29,7 +29,7 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column
+	@Column(columnDefinition = "TEXT")
 	private String review;
 	
 	@Column
@@ -48,6 +48,6 @@ public class Review {
 	private String productName;
 	
 	@Column
-	private LocalDate reviewedDate;
+	private LocalDateTime reviewedDate;
 	
 }

@@ -20,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, QueryB
 			FROM
 				reviews
 			WHERE
-				review_source = "iTunes"
+				review_source = :storeType
 			GROUP BY
 				MONTH(reviewed_date),
 				YEAR(reviewed_date)
@@ -36,13 +36,11 @@ public interface ReviewRepository extends JpaRepository<Review, Integer>, QueryB
 				COUNT(rating) AS totalRatings
 			FROM
 				reviews
-			WHERE
-				review_source = "iTunes"
 			GROUP BY
 				rating
 			ORDER BY
-				rating
+				rating DESC
 			""", nativeQuery = true)
-	public List<TotalRatingProjection> findTotalRatingsByStoreType(String storeType);
+	public List<TotalRatingProjection> findTotalRatingsByStoreType();
 
 }
