@@ -41,26 +41,9 @@ public class ReviewsServiceTest {
 
 	@Test
 	void test_createReview() {
-		ReviewRequestDTO reviewRequestDTO = ReviewRequestDTO.builder()
-				.review("Pero deberia de poder cambiarle el idioma a alexa")
-				.author("WarcryxD")
-				.reviewSource(StoreType.iTunes)
-				.rating(4)
-				.title("Excelente")
-				.productName("Amazon Alexa")
-				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
-				.build();
+		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTO();
 
-		Review review = Review.builder()
-				.id(1)
-				.review("Pero deberia de poder cambiarle el idioma a alexa")
-				.author("WarcryxD")
-				.reviewSource(StoreType.iTunes)
-				.rating(4)
-				.title("Excelente")
-				.productName("Amazon Alexa")
-				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
-				.build();
+		Review review = getReviews().get(0);
 
 		when(reviewsRepository.save(any())).thenReturn(review);
 
@@ -80,15 +63,7 @@ public class ReviewsServiceTest {
 
 	@Test
 	void test_createReview_Exception() {
-		ReviewRequestDTO reviewRequestDTO = ReviewRequestDTO.builder()
-				.review("Pero deberia de poder cambiarle el idioma a alexa")
-				.author("WarcryxD")
-				.reviewSource(StoreType.iTunes)
-				.rating(4)
-				.title("Excelente")
-				.productName("Amazon Alexa")
-				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
-				.build();
+		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTO();
 
 		when(reviewsRepository.save(any())).thenThrow(new RuntimeException());
 
@@ -99,7 +74,127 @@ public class ReviewsServiceTest {
 	void test_getAllReviews() {
 		Review filterCrietria = new Review();
 		Example<Review> reviewExample = Example.of(filterCrietria);
+		List<Review> reviews = getReviews();
 
+		when(reviewsRepository.findAll(reviewExample)).thenReturn(reviews);
+
+		List<ReviewResponseDTO> reviewResponseDTOs = reviewsService.getAllReviews(filterCrietria);
+
+		verify(reviewsRepository).findAll(reviewExample);
+
+		assertEquals(reviews.get(0).getId(), reviewResponseDTOs.get(0).getId());
+		assertEquals(reviews.get(0).getReview(), reviewResponseDTOs.get(0).getReview());
+		assertEquals(reviews.get(0).getAuthor(), reviewResponseDTOs.get(0).getAuthor());
+		assertEquals(reviews.get(0).getReviewSource(), reviewResponseDTOs.get(0).getReviewSource());
+		assertEquals(reviews.get(0).getRating(), reviewResponseDTOs.get(0).getRating());
+		assertEquals(reviews.get(0).getTitle(), reviewResponseDTOs.get(0).getTitle());
+		assertEquals(reviews.get(0).getProductName(), reviewResponseDTOs.get(0).getProductName());
+		assertEquals(reviews.get(0).getReviewedDate(), reviewResponseDTOs.get(0).getReviewedDate());
+
+		assertEquals(reviews.get(1).getId(), reviewResponseDTOs.get(1).getId());
+		assertEquals(reviews.get(1).getReview(), reviewResponseDTOs.get(1).getReview());
+		assertEquals(reviews.get(1).getAuthor(), reviewResponseDTOs.get(1).getAuthor());
+		assertEquals(reviews.get(1).getReviewSource(), reviewResponseDTOs.get(1).getReviewSource());
+		assertEquals(reviews.get(1).getRating(), reviewResponseDTOs.get(1).getRating());
+		assertEquals(reviews.get(1).getTitle(), reviewResponseDTOs.get(1).getTitle());
+		assertEquals(reviews.get(1).getProductName(), reviewResponseDTOs.get(1).getProductName());
+		assertEquals(reviews.get(1).getReviewedDate(), reviewResponseDTOs.get(1).getReviewedDate());
+	}
+
+	@Test
+	void test_getAllReviews_Exception() {
+		Review filterCrietria = new Review();
+		Example<Review> reviewExample = Example.of(filterCrietria);
+
+		when(reviewsRepository.findAll(reviewExample)).thenThrow(new RuntimeException());
+
+		assertThrows(RuntimeException.class, () -> reviewsService.getAllReviews(filterCrietria));
+	}
+
+	@Test
+	void test_getAverageRatingByStoreType() {
+		List<MonthlyRatingProjection> list = getMonthlyRatingProjections();
+
+		when(reviewsRepository.findAverageRatingByStoreType(any())).thenReturn(list);
+
+		List<MonthlyRatingProjection> monthlyRatings = reviewsService.getAverageRatingByStoreType(StoreType.GooglePlayStore);
+
+		verify(reviewsRepository).findAverageRatingByStoreType(any());
+
+		assertEquals(list.get(0).getRating(), monthlyRatings.get(0).getRating());
+		assertEquals(list.get(0).getMonth(), monthlyRatings.get(0).getMonth());
+		assertEquals(list.get(0).getYear(), monthlyRatings.get(0).getYear());
+
+		assertEquals(list.get(1).getRating(), monthlyRatings.get(1).getRating());
+		assertEquals(list.get(1).getMonth(), monthlyRatings.get(1).getMonth());
+		assertEquals(list.get(1).getYear(), monthlyRatings.get(1).getYear());
+	}
+
+	@Test
+	void test_getAverageRatingByStoreType_Exception() {
+		when(reviewsRepository.findAverageRatingByStoreType(any())).thenThrow(new RuntimeException());
+
+		assertThrows(RuntimeException.class, () -> reviewsService.getAverageRatingByStoreType(StoreType.GooglePlayStore));
+	}
+
+	@Test
+	void test_getTotalRatings() {
+		List<TotalRatingProjection> list = getTotalRatingProjections();
+
+		when(reviewsRepository.findTotalRatings()).thenReturn(list);
+
+		List<TotalRatingProjection> ratingProjections = reviewsService.getTotalRatings();
+
+		verify(reviewsRepository).findTotalRatings();
+
+		assertEquals(list.get(0).getRating(), ratingProjections.get(0).getRating());
+		assertEquals(list.get(0).getTotalRatings(), ratingProjections.get(0).getTotalRatings());
+
+		assertEquals(list.get(1).getRating(), ratingProjections.get(1).getRating());
+		assertEquals(list.get(1).getTotalRatings(), ratingProjections.get(1).getTotalRatings());
+	}
+
+	@Test
+	void test_getTotalRatings_Exception() {
+		when(reviewsRepository.findTotalRatings()).thenThrow(new RuntimeException());
+
+		assertThrows(RuntimeException.class, () -> reviewsService.getTotalRatings());
+	}
+
+	//	@Test
+	void test_createMultipleReviews() {
+		ReviewRequestDTO reviewRequestDTOOne = getReviewRequestDTO();
+
+		ReviewRequestDTO reviewRequestDTOTwo = ReviewRequestDTO.builder()
+				.review("review")
+				.author("author")
+				.reviewSource(StoreType.GooglePlayStore)
+				.rating(2)
+				.title("title")
+				.productName("product")
+				.reviewedDate(LocalDateTime.of(2017, 5, 4, 3, 2))
+				.build();
+
+		List<ReviewRequestDTO> requestDTOs = List.of(reviewRequestDTOOne, reviewRequestDTOTwo);
+
+		reviewsService.createMultipleReviews(requestDTOs);
+
+		verify(reviewsRepository, times(2)).save(any());
+	}
+
+	private ReviewRequestDTO getReviewRequestDTO() {
+		return ReviewRequestDTO.builder()
+				.review("Pero deberia de poder cambiarle el idioma a alexa")
+				.author("WarcryxD")
+				.reviewSource(StoreType.iTunes)
+				.rating(4)
+				.title("Excelente")
+				.productName("Amazon Alexa")
+				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
+				.build();
+	}
+
+	private List<Review> getReviews() {
 		Review reviewOne = Review.builder()
 				.id(1)
 				.review("Pero deberia de poder cambiarle el idioma a alexa")
@@ -122,43 +217,10 @@ public class ReviewsServiceTest {
 				.reviewedDate(LocalDateTime.of(2024, 2, 2, 13, 7, 42))
 				.build();
 
-		when(reviewsRepository.findAll(reviewExample)).thenReturn(List.of(reviewOne, reviewTwo));
-
-		List<ReviewResponseDTO> reviewResponseDTOs = reviewsService.getAllReviews(filterCrietria);
-
-		verify(reviewsRepository).findAll(reviewExample);
-
-		assertEquals(reviewOne.getId(), reviewResponseDTOs.get(0).getId());
-		assertEquals(reviewOne.getReview(), reviewResponseDTOs.get(0).getReview());
-		assertEquals(reviewOne.getAuthor(), reviewResponseDTOs.get(0).getAuthor());
-		assertEquals(reviewOne.getReviewSource(), reviewResponseDTOs.get(0).getReviewSource());
-		assertEquals(reviewOne.getRating(), reviewResponseDTOs.get(0).getRating());
-		assertEquals(reviewOne.getTitle(), reviewResponseDTOs.get(0).getTitle());
-		assertEquals(reviewOne.getProductName(), reviewResponseDTOs.get(0).getProductName());
-		assertEquals(reviewOne.getReviewedDate(), reviewResponseDTOs.get(0).getReviewedDate());
-
-		assertEquals(reviewTwo.getId(), reviewResponseDTOs.get(1).getId());
-		assertEquals(reviewTwo.getReview(), reviewResponseDTOs.get(1).getReview());
-		assertEquals(reviewTwo.getAuthor(), reviewResponseDTOs.get(1).getAuthor());
-		assertEquals(reviewTwo.getReviewSource(), reviewResponseDTOs.get(1).getReviewSource());
-		assertEquals(reviewTwo.getRating(), reviewResponseDTOs.get(1).getRating());
-		assertEquals(reviewTwo.getTitle(), reviewResponseDTOs.get(1).getTitle());
-		assertEquals(reviewTwo.getProductName(), reviewResponseDTOs.get(1).getProductName());
-		assertEquals(reviewTwo.getReviewedDate(), reviewResponseDTOs.get(1).getReviewedDate());
+		return List.of(reviewOne, reviewTwo);
 	}
 
-	@Test
-	void test_getAllReviews_Exception() {
-		Review filterCrietria = new Review();
-		Example<Review> reviewExample = Example.of(filterCrietria);
-
-		when(reviewsRepository.findAll(reviewExample)).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class, () -> reviewsService.getAllReviews(filterCrietria));
-	}
-
-	@Test
-	void test_getAverageRatingByStoreType() {
+	private List<MonthlyRatingProjection> getMonthlyRatingProjections() {
 		MonthlyRatingProjection ratingOne = new MonthlyRatingProjection() {
 
 			@Override
@@ -195,32 +257,10 @@ public class ReviewsServiceTest {
 			}
 		};
 
-		List<MonthlyRatingProjection> list = List.of(ratingOne, ratingTwo);
-
-		when(reviewsRepository.findAverageRatingByStoreType(any())).thenReturn(list);
-
-		List<MonthlyRatingProjection> monthlyRatings = reviewsService.getAverageRatingByStoreType(StoreType.GooglePlayStore);
-
-		verify(reviewsRepository).findAverageRatingByStoreType(any());
-
-		assertEquals(list.get(0).getRating(), monthlyRatings.get(0).getRating());
-		assertEquals(list.get(0).getMonth(), monthlyRatings.get(0).getMonth());
-		assertEquals(list.get(0).getYear(), monthlyRatings.get(0).getYear());
-
-		assertEquals(list.get(1).getRating(), monthlyRatings.get(1).getRating());
-		assertEquals(list.get(1).getMonth(), monthlyRatings.get(1).getMonth());
-		assertEquals(list.get(1).getYear(), monthlyRatings.get(1).getYear());
+		return List.of(ratingOne, ratingTwo);
 	}
 
-	@Test
-	void test_getAverageRatingByStoreType_Exception() {
-		when(reviewsRepository.findAverageRatingByStoreType(any())).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class, () -> reviewsService.getAverageRatingByStoreType(StoreType.GooglePlayStore));
-	}
-
-	@Test
-	void test_getTotalRatings() {
+	private List<TotalRatingProjection> getTotalRatingProjections() {
 		TotalRatingProjection categoryFive = new TotalRatingProjection() {
 
 			@Override
@@ -247,55 +287,7 @@ public class ReviewsServiceTest {
 			}
 		};
 
-		List<TotalRatingProjection> list = List.of(categoryFive, categoryTwo);
-
-		when(reviewsRepository.findTotalRatings()).thenReturn(list);
-
-		List<TotalRatingProjection> ratingProjections = reviewsService.getTotalRatings();
-
-		verify(reviewsRepository).findTotalRatings();
-
-		assertEquals(list.get(0).getRating(), ratingProjections.get(0).getRating());
-		assertEquals(list.get(0).getTotalRatings(), ratingProjections.get(0).getTotalRatings());
-
-		assertEquals(list.get(1).getRating(), ratingProjections.get(1).getRating());
-		assertEquals(list.get(1).getTotalRatings(), ratingProjections.get(1).getTotalRatings());
-	}
-
-	@Test
-	void test_getTotalRatings_Exception() {
-		when(reviewsRepository.findTotalRatings()).thenThrow(new RuntimeException());
-
-		assertThrows(RuntimeException.class, () -> reviewsService.getTotalRatings());
-	}
-
-	//	@Test
-	void test_createMultipleReviews() {
-		ReviewRequestDTO reviewRequestDTOOne = ReviewRequestDTO.builder()
-				.review("Pero deberia de poder cambiarle el idioma a alexa")
-				.author("WarcryxD")
-				.reviewSource(StoreType.iTunes)
-				.rating(4)
-				.title("Excelente")
-				.productName("Amazon Alexa")
-				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
-				.build();
-
-		ReviewRequestDTO reviewRequestDTOTwo = ReviewRequestDTO.builder()
-				.review("review")
-				.author("author")
-				.reviewSource(StoreType.GooglePlayStore)
-				.rating(2)
-				.title("title")
-				.productName("product")
-				.reviewedDate(LocalDateTime.of(2017, 5, 4, 3, 2))
-				.build();
-
-		List<ReviewRequestDTO> requestDTOs = List.of(reviewRequestDTOOne, reviewRequestDTOTwo);
-
-		reviewsService.createMultipleReviews(requestDTOs);
-
-		verify(reviewsRepository, times(2)).save(any());
+		return List.of(categoryFive, categoryTwo);
 	}
 
 }
