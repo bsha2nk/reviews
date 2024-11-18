@@ -5,13 +5,15 @@ import java.time.LocalDateTime;
 import com.bsha2nk.reviews.util.StoreType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewResponseDTO {
 	
 	private Integer id;
@@ -32,5 +34,5 @@ public class ReviewResponseDTO {
 	
 	@JsonProperty("reviewed_date")
 	private LocalDateTime reviewedDate;
-	
+
 }

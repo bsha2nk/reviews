@@ -1,5 +1,6 @@
 package com.bsha2nk.reviews.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,11 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bsha2nk.reviews.dto.ReviewRequestDTO;
+import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.entity.Review;
 import com.bsha2nk.reviews.repository.ReviewsRepository;
 import com.bsha2nk.reviews.util.StoreType;
@@ -27,7 +30,7 @@ public class ReviewsServiceTest {
 	@Mock
 	private ReviewsRepository reviewsRepository;
 	
-	@Mock
+	@Spy
 	private ModelMapper mapper;
 	
 	@InjectMocks
@@ -44,10 +47,32 @@ public class ReviewsServiceTest {
         		.productName("Amazon Alexa")
         		.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
         		.build();
+        
+        Review review = Review.builder()
+        		.id(1)
+        		.review("Pero deberia de poder cambiarle el idioma a alexa")
+        		.author("WarcryxD")
+        		.reviewSource(StoreType.iTunes)
+        		.rating(4)
+        		.title("Excelente")
+        		.productName("Amazon Alexa")
+        		.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
+        		.build();
 		
-		reviewsService.createReview(reviewRequestDTO);
+        when(reviewsRepository.save(any())).thenReturn(review);
+        
+		ReviewResponseDTO responseDTO = reviewsService.createReview(reviewRequestDTO);
 		
 		verify(reviewsRepository).save(any());
+		
+		assertEquals(review.getId(), responseDTO.getId());
+		assertEquals(review.getReview(), responseDTO.getReview());
+		assertEquals(review.getAuthor(), responseDTO.getAuthor());
+		assertEquals(review.getReviewSource(), responseDTO.getReviewSource());
+		assertEquals(review.getRating(), responseDTO.getRating());
+		assertEquals(review.getTitle(), responseDTO.getTitle());
+		assertEquals(review.getProductName(), responseDTO.getProductName());
+		assertEquals(review.getReviewedDate(), responseDTO.getReviewedDate());
 	}
 	
 	@Test

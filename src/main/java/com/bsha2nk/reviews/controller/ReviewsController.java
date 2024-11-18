@@ -47,7 +47,9 @@ public class ReviewsController {
 				.rating(rating)
 				.build();
 		
-		return new ResponseEntity<List<ReviewResponseDTO>>(reviewsService.getAllReviews(reviewFilterCriteria), HttpStatus.OK);
+		List<ReviewResponseDTO> list = reviewsService.getAllReviews(reviewFilterCriteria);
+		
+		return new ResponseEntity<List<ReviewResponseDTO>>(list, HttpStatus.OK);
 	}
 	
 	@GetMapping("/average-rating/store-type/{storeType}")
