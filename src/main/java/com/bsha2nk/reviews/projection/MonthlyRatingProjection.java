@@ -4,7 +4,7 @@ public interface MonthlyRatingProjection {
 
 	Double getRating();
 	
-	Integer getMonth();
+	String getMonth();
 	
 	Integer getyear();
 }

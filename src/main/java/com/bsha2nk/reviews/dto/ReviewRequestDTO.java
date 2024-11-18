@@ -5,11 +5,13 @@ import java.time.LocalDateTime;
 import com.bsha2nk.reviews.util.StoreType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@Builder
 public class ReviewRequestDTO {
 
 	private String review;

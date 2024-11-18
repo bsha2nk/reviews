@@ -2,7 +2,6 @@ package com.bsha2nk.reviews.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Example;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.bsha2nk.reviews.dto.ReviewRequestDTO;
 import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.entity.Review;
-import com.bsha2nk.reviews.exception.ResourceNotFoundException;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
 import com.bsha2nk.reviews.projection.TotalRatingProjection;
 import com.bsha2nk.reviews.repository.ReviewRepository;
@@ -53,16 +51,6 @@ public class ReviewService {
 		}
 		
 		return reviewResponseDTOs;
-	}
-
-	public ReviewResponseDTO getReviewById(int id) {
-		Optional<Review> review = reviewRepository.findById(id);
-		
-		if (review.isEmpty()) {
-			throw new ResourceNotFoundException(String.format("Review with ID %d was not found.", id));
-		}
-		
-		return mapper.map(review.get(), ReviewResponseDTO.class);
 	}
 
 	public List<MonthlyRatingProjection> getAverageRatingByStoreType(StoreType storeType) {

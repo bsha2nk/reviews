@@ -50,13 +50,8 @@ public class ReviewController {
 		return new ResponseEntity<List<ReviewResponseDTO>>(reviewService.getAllReviews(reviewFilterCriteria), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable int id) {
-		return ResponseEntity.ok(reviewService.getReviewById(id));
-	}
-	
 	@GetMapping("/average-rating/store-type/{storeType}")
-	public ResponseEntity<List<MonthlyRatingProjection>> getAverageRating(@PathVariable StoreType storeType) {
+	public ResponseEntity<List<MonthlyRatingProjection>> getAverageRatingByStoreType(@PathVariable StoreType storeType) {
 		return ResponseEntity.ok(reviewService.getAverageRatingByStoreType(storeType));
 	}
 	
@@ -68,6 +63,7 @@ public class ReviewController {
 	@PostMapping("/multiple")
 	public ResponseEntity<List<ReviewResponseDTO>> createMultipleReviews(@RequestBody List<ReviewRequestDTO> reviewRequestDTOs) {
 		List<ReviewResponseDTO> reviewResponseDTOs = reviewService.createMultipleReviews(reviewRequestDTOs);
+		
 		return new ResponseEntity<List<ReviewResponseDTO>>(reviewResponseDTOs, HttpStatus.CREATED);
 	}
 	
