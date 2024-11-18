@@ -19,17 +19,17 @@ import com.bsha2nk.reviews.dto.ReviewRequestDTO;
 import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
 import com.bsha2nk.reviews.projection.TotalRatingProjection;
-import com.bsha2nk.reviews.service.ReviewService;
+import com.bsha2nk.reviews.service.ReviewsService;
 import com.bsha2nk.reviews.util.StoreType;
 
 @ExtendWith(SpringExtension.class)
 public class ReviewsControllerTest {
 
 	@Mock
-	private ReviewService reviewService;
+	private ReviewsService reviewsService;
 	
 	@InjectMocks
-	private ReviewController reviewController;
+	private ReviewsController reviewsController;
 	
 	@Test
 	void test_createReview() {
@@ -56,35 +56,44 @@ public class ReviewsControllerTest {
         
 //        when(reviewService.createReview(reviewRequestDTO)).thenReturn(reviewResponseDTO);
         
-        ResponseEntity<ReviewResponseDTO> response = reviewController.createReview(reviewRequestDTO);
+        ResponseEntity<ReviewResponseDTO> response = reviewsController.createReview(reviewRequestDTO);
         
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 //        assertThat(response.getBody()).isInstanceOf(ReviewResponseDTO.class);
-        verify(reviewService).createReview(any());
+        verify(reviewsService).createReview(any());
 	}
 	
 	@Test
 	void test_getAllreviews() {
-		ResponseEntity<List<ReviewResponseDTO>> response = reviewController.getAllReviews(null, null, null);
+		ResponseEntity<List<ReviewResponseDTO>> response = reviewsController.getAllReviews(null, null, null);
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		verify(reviewService).getAllReviews(any());
+		verify(reviewsService).getAllReviews(any());
 	}
 	
 	@Test
 	void test_getAverageRating() {
-		ResponseEntity<List<MonthlyRatingProjection>> response = reviewController.getAverageRatingByStoreType(StoreType.GooglePlayStore);
+		ResponseEntity<List<MonthlyRatingProjection>> response = reviewsController.getAverageRatingByStoreType(StoreType.GooglePlayStore);
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		verify(reviewService).getAverageRatingByStoreType(any());
+		verify(reviewsService).getAverageRatingByStoreType(any());
+	}
+
+	// TODO
+	@Test
+	void test_getAverageRating_Incorrect_StoreType {
+		ResponseEntity<List<MonthlyRatingProjection>> response = reviewsController.getAverageRatingByStoreType(StoreType.GooglePlayStore);
+		
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		verify(reviewsService).getAverageRatingByStoreType(any());
 	}
 	
 	@Test
 	void test_getTotalRatings() {
-		ResponseEntity<List<TotalRatingProjection>> response = reviewController.getTotalRatings();
+		ResponseEntity<List<TotalRatingProjection>> response = reviewsController.getTotalRatings();
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		verify(reviewService).getTotalRatings();
+		verify(reviewsService).getTotalRatings();
 	}
 	
 }

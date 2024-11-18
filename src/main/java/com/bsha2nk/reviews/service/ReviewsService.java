@@ -12,16 +12,16 @@ import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.entity.Review;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
 import com.bsha2nk.reviews.projection.TotalRatingProjection;
-import com.bsha2nk.reviews.repository.ReviewRepository;
+import com.bsha2nk.reviews.repository.ReviewsRepository;
 import com.bsha2nk.reviews.util.StoreType;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewService {
+public class ReviewsService {
 	
-	private final ReviewRepository reviewRepository;
+	private final ReviewsRepository reviewsRepository;
 	
 	private final ModelMapper mapper;
 	
@@ -36,7 +36,7 @@ public class ReviewService {
 				.reviewedDate(requestDTO.getReviewedDate())
 				.build();
 		
-		Review newReview = reviewRepository.save(review);
+		Review newReview = reviewsRepository.save(review);
 		
 		return mapper.map(newReview, ReviewResponseDTO.class);
 	}
@@ -46,7 +46,7 @@ public class ReviewService {
 		
 		Example<Review> reviewExample = Example.of(reviewFilterCriteria);
 		
-		for (Review review : reviewRepository.findAll(reviewExample)) {
+		for (Review review : reviewsRepository.findAll(reviewExample)) {
 			reviewResponseDTOs.add(mapper.map(review, ReviewResponseDTO.class));
 		}
 		
@@ -54,11 +54,11 @@ public class ReviewService {
 	}
 
 	public List<MonthlyRatingProjection> getAverageRatingByStoreType(StoreType storeType) {
-		return reviewRepository.findAverageRatingByStoreType(storeType.toString()); 
+		return reviewsRepository.findAverageRatingByStoreType(storeType.toString());
 	}
 	
 	public List<TotalRatingProjection> getTotalRatings() {
-		return reviewRepository.findTotalRatings();
+		return reviewsRepository.findTotalRatings();
 	}
 	
 	public List<ReviewResponseDTO> createMultipleReviews(List<ReviewRequestDTO> requestDTOs) {

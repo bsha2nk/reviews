@@ -18,7 +18,7 @@ import com.bsha2nk.reviews.dto.ReviewResponseDTO;
 import com.bsha2nk.reviews.entity.Review;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
 import com.bsha2nk.reviews.projection.TotalRatingProjection;
-import com.bsha2nk.reviews.service.ReviewService;
+import com.bsha2nk.reviews.service.ReviewsService;
 import com.bsha2nk.reviews.util.StoreType;
 
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/reviews")
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewsController {
 	
-	private final ReviewService reviewService;
+	private final ReviewsService reviewsService;
 	
 	@PostMapping
 	public ResponseEntity<ReviewResponseDTO> createReview(@RequestBody ReviewRequestDTO reviewRequestDTO) {
-		ReviewResponseDTO reviewResponseDTO = reviewService.createReview(reviewRequestDTO);
+		ReviewResponseDTO reviewResponseDTO = reviewsService.createReview(reviewRequestDTO);
 		
 		return new ResponseEntity<ReviewResponseDTO>(reviewResponseDTO, HttpStatus.CREATED);
 	}
@@ -47,22 +47,22 @@ public class ReviewController {
 				.rating(rating)
 				.build();
 		
-		return new ResponseEntity<List<ReviewResponseDTO>>(reviewService.getAllReviews(reviewFilterCriteria), HttpStatus.OK);
+		return new ResponseEntity<List<ReviewResponseDTO>>(reviewsService.getAllReviews(reviewFilterCriteria), HttpStatus.OK);
 	}
 	
 	@GetMapping("/average-rating/store-type/{storeType}")
 	public ResponseEntity<List<MonthlyRatingProjection>> getAverageRatingByStoreType(@PathVariable StoreType storeType) {
-		return ResponseEntity.ok(reviewService.getAverageRatingByStoreType(storeType));
+		return ResponseEntity.ok(reviewsService.getAverageRatingByStoreType(storeType));
 	}
 	
 	@GetMapping("/total-ratings")
 	public ResponseEntity<List<TotalRatingProjection>> getTotalRatings() {
-		return ResponseEntity.ok(reviewService.getTotalRatings());
+		return ResponseEntity.ok(reviewsService.getTotalRatings());
 	}
 	
 	@PostMapping("/multiple")
 	public ResponseEntity<List<ReviewResponseDTO>> createMultipleReviews(@RequestBody List<ReviewRequestDTO> reviewRequestDTOs) {
-		List<ReviewResponseDTO> reviewResponseDTOs = reviewService.createMultipleReviews(reviewRequestDTOs);
+		List<ReviewResponseDTO> reviewResponseDTOs = reviewsService.createMultipleReviews(reviewRequestDTOs);
 		
 		return new ResponseEntity<List<ReviewResponseDTO>>(reviewResponseDTOs, HttpStatus.CREATED);
 	}

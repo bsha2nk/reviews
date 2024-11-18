@@ -10,7 +10,7 @@ import com.bsha2nk.reviews.entity.Review;
 import com.bsha2nk.reviews.projection.MonthlyRatingProjection;
 import com.bsha2nk.reviews.projection.TotalRatingProjection;
 
-public interface ReviewRepository extends JpaRepository<Review, Integer>, QueryByExampleExecutor<Review> {
+public interface ReviewsRepository extends JpaRepository<Review, Integer>, QueryByExampleExecutor<Review> {
 
 	@Query(value = """
 			SELECT
