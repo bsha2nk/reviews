@@ -73,28 +73,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/reviews",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"reviews"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Filter Reviews",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/reviews?rating=4&storeType=iTunes&date=2018-01-12T02:27:03",
+					"raw": "http://localhost:8080/api/v1/reviews?storeType=iTunes",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -108,7 +87,8 @@
 					"query": [
 						{
 							"key": "rating",
-							"value": "4"
+							"value": "4",
+							"disabled": true
 						},
 						{
 							"key": "storeType",
@@ -116,7 +96,8 @@
 						},
 						{
 							"key": "date",
-							"value": "2018-01-12T02:27:03"
+							"value": "2018-01-12T02:27:03",
+							"disabled": true
 						}
 					]
 				}
