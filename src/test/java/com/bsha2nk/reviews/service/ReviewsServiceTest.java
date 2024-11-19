@@ -127,11 +127,9 @@ public class ReviewsServiceTest {
 
 		assertEquals(list.get(0).getRating(), monthlyRatings.get(0).getRating());
 		assertEquals(list.get(0).getMonth(), monthlyRatings.get(0).getMonth());
-		assertEquals(list.get(0).getYear(), monthlyRatings.get(0).getYear());
 
 		assertEquals(list.get(1).getRating(), monthlyRatings.get(1).getRating());
 		assertEquals(list.get(1).getMonth(), monthlyRatings.get(1).getMonth());
-		assertEquals(list.get(1).getYear(), monthlyRatings.get(1).getYear());
 	}
 
 	@Test
@@ -259,27 +257,17 @@ public class ReviewsServiceTest {
 		MonthlyRatingProjection ratingOne = new MonthlyRatingProjection() {
 
 			@Override
-			public Integer getYear() {
-				return 2017;
-			}
-
-			@Override
 			public Double getRating() {
 				return 2.34;
 			}
 
 			@Override
 			public String getMonth() {
-				return "January";
+				return "January, 2017";
 			}
 		};
 
 		MonthlyRatingProjection ratingTwo = new MonthlyRatingProjection() {
-
-			@Override
-			public Integer getYear() {
-				return 2024;
-			}
 
 			@Override
 			public Double getRating() {
@@ -288,7 +276,7 @@ public class ReviewsServiceTest {
 
 			@Override
 			public String getMonth() {
-				return "May";
+				return "May, 2024";
 			}
 		};
 

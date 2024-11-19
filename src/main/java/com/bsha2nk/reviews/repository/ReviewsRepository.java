@@ -15,17 +15,13 @@ public interface ReviewsRepository extends JpaRepository<Review, Integer>, Query
 	@Query(value = """
 			SELECT
 				ROUND(AVG(rating), 2) AS rating,
-				MONTHNAME(reviewed_date) AS month,
-				YEAR(reviewed_date) AS year
+				CONCAT(MONTHNAME(reviewed_date), ", ", YEAR(reviewed_date)) AS month
 			FROM
 				reviews
 			WHERE
 				review_source = :storeType
 			GROUP BY
-				MONTHNAME(reviewed_date),
-				YEAR(reviewed_date)
-			ORDER BY
-				YEAR(reviewed_date)
+				CONCAT(MONTHNAME(reviewed_date), ", ", YEAR(reviewed_date))
 			""", nativeQuery = true)
 	public List<MonthlyRatingProjection> findAverageRatingByStoreType(String storeType);
 	

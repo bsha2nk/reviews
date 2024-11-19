@@ -6,5 +6,4 @@ public interface MonthlyRatingProjection {
 	
 	String getMonth();
 	
-	Integer getYear();
 }

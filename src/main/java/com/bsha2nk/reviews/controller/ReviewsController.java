@@ -52,7 +52,7 @@ public class ReviewsController {
 		return new ResponseEntity<List<ReviewResponseDTO>>(list, HttpStatus.OK);
 	}
 	
-	@GetMapping("/average-rating/store-type/{storeType}")
+	@GetMapping("/average-monthly-rating/store-type/{storeType}")
 	public ResponseEntity<List<MonthlyRatingProjection>> getAverageRatingByStoreType(@PathVariable StoreType storeType) {
 		return ResponseEntity.ok(reviewsService.getAverageRatingByStoreType(storeType));
 	}

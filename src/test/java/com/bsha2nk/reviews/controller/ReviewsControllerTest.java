@@ -132,12 +132,12 @@ public class ReviewsControllerTest {
 	}
 
 	@Test
-	void test_getAverageRating() throws UnsupportedEncodingException, Exception {
+	void test_getAverageMonthlyRating() throws UnsupportedEncodingException, Exception {
 		List<MonthlyRatingProjection> list = getMonthlyRatingProjections();
 
 		when(reviewsService.getAverageRatingByStoreType(any())).thenReturn(list);
 
-		String response = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTunes"))
+		String response = mockMvc.perform(get("/api/v1/reviews/average-monthly-rating/store-type/iTunes"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
@@ -147,16 +147,14 @@ public class ReviewsControllerTest {
 
 		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get(RATING));
 		assertEquals(list.get(0).getMonth(), ((JSONObject)jsonArray.get(0)).get("month"));
-		assertEquals(list.get(0).getYear(), ((JSONObject)jsonArray.get(0)).get("year"));
 
 		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get(RATING));
 		assertEquals(list.get(1).getMonth(), ((JSONObject)jsonArray.get(1)).get("month"));
-		assertEquals(list.get(1).getYear(), ((JSONObject)jsonArray.get(1)).get("year"));
 	}
 
 	@Test
-	void test_getAverageRating_Exception() throws UnsupportedEncodingException, Exception {
-		String response = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTune"))
+	void test_getAverageMonthlyRating_Exception() throws UnsupportedEncodingException, Exception {
+		String response = mockMvc.perform(get("/api/v1/reviews/average-monthly-rating/store-type/iTune"))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
@@ -272,27 +270,17 @@ public class ReviewsControllerTest {
 		MonthlyRatingProjection ratingOne = new MonthlyRatingProjection() {
 
 			@Override
-			public Integer getYear() {
-				return 2017;
-			}
-
-			@Override
 			public Double getRating() {
 				return 2.34;
 			}
 
 			@Override
 			public String getMonth() {
-				return "January";
+				return "January, 2017";
 			}
 		};
 
 		MonthlyRatingProjection ratingTwo = new MonthlyRatingProjection() {
-
-			@Override
-			public Integer getYear() {
-				return 2024;
-			}
 
 			@Override
 			public Double getRating() {
@@ -301,7 +289,7 @@ public class ReviewsControllerTest {
 
 			@Override
 			public String getMonth() {
-				return "May";
+				return "May, 2024";
 			}
 		};
 
