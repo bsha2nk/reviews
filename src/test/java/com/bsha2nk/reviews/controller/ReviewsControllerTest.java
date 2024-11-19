@@ -1,5 +1,13 @@
 package com.bsha2nk.reviews.controller;
 
+import static com.bsha2nk.reviews.util.Constants.AUTHOR;
+import static com.bsha2nk.reviews.util.Constants.ID;
+import static com.bsha2nk.reviews.util.Constants.PRODUCT_NAME;
+import static com.bsha2nk.reviews.util.Constants.RATING;
+import static com.bsha2nk.reviews.util.Constants.REVIEW;
+import static com.bsha2nk.reviews.util.Constants.REVIEWED_DATE;
+import static com.bsha2nk.reviews.util.Constants.REVIEW_SOURCE;
+import static com.bsha2nk.reviews.util.Constants.TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -47,22 +55,22 @@ public class ReviewsControllerTest {
 
 		when(reviewsService.createReview(any())).thenReturn(reviewResponseDTO);
 
-		String result = mockMvc.perform(post("/api/v1/reviews")
+		String response = mockMvc.perform(post("/api/v1/reviews")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(review))
 				.andExpect(status().isCreated())
 				.andReturn().getResponse().getContentAsString();
 
-		JSONObject jsonObject = new JSONObject(result);
+		JSONObject jsonObject = new JSONObject(response);
 
-		assertEquals(reviewResponseDTO.getId(), jsonObject.get("id"));
-		assertEquals(reviewResponseDTO.getReview(), jsonObject.get("review"));
-		assertEquals(reviewResponseDTO.getAuthor(), jsonObject.get("author"));
-		assertEquals(reviewResponseDTO.getReviewSource().toString(), jsonObject.get("review_source"));
-		assertEquals(reviewResponseDTO.getRating(), jsonObject.get("rating"));
-		assertEquals(reviewResponseDTO.getTitle(), jsonObject.get("title"));
-		assertEquals(reviewResponseDTO.getProductName(), jsonObject.get("product_name"));
-		assertEquals(reviewResponseDTO.getReviewedDate().toString(), jsonObject.get("reviewed_date"));
+		assertEquals(reviewResponseDTO.getId(), jsonObject.get(ID));
+		assertEquals(reviewResponseDTO.getReview(), jsonObject.get(REVIEW));
+		assertEquals(reviewResponseDTO.getAuthor(), jsonObject.get(AUTHOR));
+		assertEquals(reviewResponseDTO.getReviewSource().toString(), jsonObject.get(REVIEW_SOURCE));
+		assertEquals(reviewResponseDTO.getRating(), jsonObject.get(RATING));
+		assertEquals(reviewResponseDTO.getTitle(), jsonObject.get(TITLE));
+		assertEquals(reviewResponseDTO.getProductName(), jsonObject.get(PRODUCT_NAME));
+		assertEquals(reviewResponseDTO.getReviewedDate().toString(), jsonObject.get(REVIEWED_DATE));
 	}
 
 	@Test
@@ -85,42 +93,42 @@ public class ReviewsControllerTest {
 
 		when(reviewsService.getAllReviews(any())).thenReturn(list);
 
-		String result = mockMvc.perform(get("/api/v1/reviews"))
+		String response = mockMvc.perform(get("/api/v1/reviews"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		JSONArray jsonArray = new JSONArray(result);
+		JSONArray jsonArray = new JSONArray(response);
 
 		assertEquals(2, jsonArray.length());
 
-		assertEquals(list.get(0).getId(), ((JSONObject)jsonArray.get(0)).get("id"));
-		assertEquals(list.get(0).getReview(), ((JSONObject)jsonArray.get(0)).get("review"));
-		assertEquals(list.get(0).getAuthor(), ((JSONObject)jsonArray.get(0)).get("author"));
-		assertEquals(list.get(0).getReviewSource().toString(), ((JSONObject)jsonArray.get(0)).get("review_source"));
-		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get("rating"));
-		assertEquals(list.get(0).getTitle(), ((JSONObject)jsonArray.get(0)).get("title"));
-		assertEquals(list.get(0).getProductName(), ((JSONObject)jsonArray.get(0)).get("product_name"));
-		assertEquals(list.get(0).getReviewedDate().toString(), ((JSONObject)jsonArray.get(0)).get("reviewed_date"));
+		assertEquals(list.get(0).getId(), ((JSONObject)jsonArray.get(0)).get(ID));
+		assertEquals(list.get(0).getReview(), ((JSONObject)jsonArray.get(0)).get(REVIEW));
+		assertEquals(list.get(0).getAuthor(), ((JSONObject)jsonArray.get(0)).get(AUTHOR));
+		assertEquals(list.get(0).getReviewSource().toString(), ((JSONObject)jsonArray.get(0)).get(REVIEW_SOURCE));
+		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get(RATING));
+		assertEquals(list.get(0).getTitle(), ((JSONObject)jsonArray.get(0)).get(TITLE));
+		assertEquals(list.get(0).getProductName(), ((JSONObject)jsonArray.get(0)).get(PRODUCT_NAME));
+		assertEquals(list.get(0).getReviewedDate().toString(), ((JSONObject)jsonArray.get(0)).get(REVIEWED_DATE));
 
-		assertEquals(list.get(1).getId(), ((JSONObject)jsonArray.get(1)).get("id"));
-		assertEquals(list.get(1).getReview(), ((JSONObject)jsonArray.get(1)).get("review"));
-		assertEquals(list.get(1).getAuthor(), ((JSONObject)jsonArray.get(1)).get("author"));
-		assertEquals(list.get(1).getReviewSource().toString(), ((JSONObject)jsonArray.get(1)).get("review_source"));
-		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get("rating"));
-		assertEquals(list.get(1).getTitle(), ((JSONObject)jsonArray.get(1)).get("title"));
-		assertEquals(list.get(1).getProductName(), ((JSONObject)jsonArray.get(1)).get("product_name"));
-		assertEquals(list.get(1).getReviewedDate().toString(), ((JSONObject)jsonArray.get(1)).get("reviewed_date"));
+		assertEquals(list.get(1).getId(), ((JSONObject)jsonArray.get(1)).get(ID));
+		assertEquals(list.get(1).getReview(), ((JSONObject)jsonArray.get(1)).get(REVIEW));
+		assertEquals(list.get(1).getAuthor(), ((JSONObject)jsonArray.get(1)).get(AUTHOR));
+		assertEquals(list.get(1).getReviewSource().toString(), ((JSONObject)jsonArray.get(1)).get(REVIEW_SOURCE));
+		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get(RATING));
+		assertEquals(list.get(1).getTitle(), ((JSONObject)jsonArray.get(1)).get(TITLE));
+		assertEquals(list.get(1).getProductName(), ((JSONObject)jsonArray.get(1)).get(PRODUCT_NAME));
+		assertEquals(list.get(1).getReviewedDate().toString(), ((JSONObject)jsonArray.get(1)).get(REVIEWED_DATE));
 	}
 
 	@Test
 	void test_getAllreviews_Exception() throws UnsupportedEncodingException, Exception {
 		when(reviewsService.getAllReviews(any())).thenThrow(new RuntimeException());
 
-		String result = mockMvc.perform(get("/api/v1/reviews"))
+		String response = mockMvc.perform(get("/api/v1/reviews"))
 				.andExpect(status().is5xxServerError())
 				.andReturn().getResponse().getContentAsString();
 
-		assertEquals("Something went wrong!", result);
+		assertEquals("Something went wrong!", response);
 	}
 
 	@Test
@@ -129,30 +137,30 @@ public class ReviewsControllerTest {
 
 		when(reviewsService.getAverageRatingByStoreType(any())).thenReturn(list);
 
-		String result = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTunes"))
+		String response = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTunes"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		JSONArray jsonArray = new JSONArray(result);
+		JSONArray jsonArray = new JSONArray(response);
 
 		assertEquals(2, jsonArray.length());
 
-		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get("rating"));
+		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get(RATING));
 		assertEquals(list.get(0).getMonth(), ((JSONObject)jsonArray.get(0)).get("month"));
 		assertEquals(list.get(0).getYear(), ((JSONObject)jsonArray.get(0)).get("year"));
 
-		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get("rating"));
+		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get(RATING));
 		assertEquals(list.get(1).getMonth(), ((JSONObject)jsonArray.get(1)).get("month"));
 		assertEquals(list.get(1).getYear(), ((JSONObject)jsonArray.get(1)).get("year"));
 	}
 
 	@Test
 	void test_getAverageRating_Exception() throws UnsupportedEncodingException, Exception {
-		String result = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTune"))
+		String response = mockMvc.perform(get("/api/v1/reviews/average-rating/store-type/iTune"))
 				.andExpect(status().isBadRequest())
 				.andReturn().getResponse().getContentAsString();
 
-		assertEquals("One or more parameters supplied by you is incorrect.", result);
+		assertEquals("One or more parameters supplied by you is incorrect.", response);
 	}
 
 	@Test
@@ -161,18 +169,18 @@ public class ReviewsControllerTest {
 
 		when(reviewsService.getTotalRatings()).thenReturn(list);
 
-		String result = mockMvc.perform(get("/api/v1/reviews/total-ratings"))
+		String response = mockMvc.perform(get("/api/v1/reviews/total-ratings"))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 
-		JSONArray jsonArray = new JSONArray(result);
+		JSONArray jsonArray = new JSONArray(response);
 
 		assertEquals(2, jsonArray.length());
 
-		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get("rating"));
+		assertEquals(list.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get(RATING));
 		assertEquals(list.get(0).getTotalRatings(), ((JSONObject)jsonArray.get(0)).get("totalRatings"));
 
-		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get("rating"));
+		assertEquals(list.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get(RATING));
 		assertEquals(list.get(1).getTotalRatings(), ((JSONObject)jsonArray.get(1)).get("totalRatings"));
 	}
 
@@ -180,11 +188,58 @@ public class ReviewsControllerTest {
 	void test_getTotalRatings_Exception() throws UnsupportedEncodingException, Exception {
 		when(reviewsService.getTotalRatings()).thenThrow(new RuntimeException());
 
-		String result = mockMvc.perform(get("/api/v1/reviews/total-ratings"))
+		String response = mockMvc.perform(get("/api/v1/reviews/total-ratings"))
 				.andExpect(status().is5xxServerError())
 				.andReturn().getResponse().getContentAsString();
 
-		assertEquals("Something went wrong!", result);
+		assertEquals("Something went wrong!", response);
+	}
+	
+	@Test
+	void test_createMultipleReviews() throws Exception {
+		String reviews = "[\r\n"
+				+ "    {\r\n"
+				+ "        \"review\": \"Pero deberia de poder cambiarle el idioma a alexa\", \"author\": \"WarcryxD\",\r\n"
+				+ "        \"review_source\": \"iTunes\", \"rating\": 4, \"title\": \"Excelente\",\r\n"
+				+ "        \"product_name\": \"Amazon Alexa\", \"reviewed_date\": \"2018-01-12T02:27:03.000Z\"\r\n"
+				+ "    },\r\n"
+				+ "    {\r\n"
+				+ "        \"review\": \"review\",\r\n"
+				+ "        \"author\": \"author\", \"review_source\": \"GooglePlayStore\", \"rating\": 5,\r\n"
+				+ "        \"title\": \"title\", \"product_name\": \"product_name\",\r\n"
+				+ "        \"reviewed_date\": \"2024-02-02T13:07:42.000Z\"\r\n"
+				+ "    }\r\n"
+				+ "]";
+
+		List<ReviewResponseDTO> reviewResponseDTOs = getReviewResponseDTOs();
+
+		when(reviewsService.createMultipleReviews(any())).thenReturn(reviewResponseDTOs);
+
+		String response = mockMvc.perform(post("/api/v1/reviews/multiple")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(reviews))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+
+		JSONArray jsonArray = new JSONArray(response);
+		
+		assertEquals(reviewResponseDTOs.get(0).getId(), ((JSONObject)jsonArray.get(0)).get(ID));
+		assertEquals(reviewResponseDTOs.get(0).getReview(), ((JSONObject)jsonArray.get(0)).get(REVIEW));
+		assertEquals(reviewResponseDTOs.get(0).getAuthor(), ((JSONObject)jsonArray.get(0)).get(AUTHOR));
+		assertEquals(reviewResponseDTOs.get(0).getReviewSource().toString(), ((JSONObject)jsonArray.get(0)).get(REVIEW_SOURCE));
+		assertEquals(reviewResponseDTOs.get(0).getRating(), ((JSONObject)jsonArray.get(0)).get(RATING));
+		assertEquals(reviewResponseDTOs.get(0).getTitle(), ((JSONObject)jsonArray.get(0)).get(TITLE));
+		assertEquals(reviewResponseDTOs.get(0).getProductName(), ((JSONObject)jsonArray.get(0)).get(PRODUCT_NAME));
+		assertEquals(reviewResponseDTOs.get(0).getReviewedDate().toString(), ((JSONObject)jsonArray.get(0)).get(REVIEWED_DATE));
+
+		assertEquals(reviewResponseDTOs.get(1).getId(), ((JSONObject)jsonArray.get(1)).get(ID));
+		assertEquals(reviewResponseDTOs.get(1).getReview(), ((JSONObject)jsonArray.get(1)).get(REVIEW));
+		assertEquals(reviewResponseDTOs.get(1).getAuthor(), ((JSONObject)jsonArray.get(1)).get(AUTHOR));
+		assertEquals(reviewResponseDTOs.get(1).getReviewSource().toString(), ((JSONObject)jsonArray.get(1)).get(REVIEW_SOURCE));
+		assertEquals(reviewResponseDTOs.get(1).getRating(), ((JSONObject)jsonArray.get(1)).get(RATING));
+		assertEquals(reviewResponseDTOs.get(1).getTitle(), ((JSONObject)jsonArray.get(1)).get(TITLE));
+		assertEquals(reviewResponseDTOs.get(1).getProductName(), ((JSONObject)jsonArray.get(1)).get(PRODUCT_NAME));
+		assertEquals(reviewResponseDTOs.get(1).getReviewedDate().toString(), ((JSONObject)jsonArray.get(1)).get(REVIEWED_DATE));
 	}
 
 	private List<ReviewResponseDTO> getReviewResponseDTOs() {
@@ -201,12 +256,12 @@ public class ReviewsControllerTest {
 
 		ReviewResponseDTO reviewResponseDTOTwo = ReviewResponseDTO.builder()
 				.id(2)
-				.review("review")
-				.author("author")
+				.review(REVIEW)
+				.author(AUTHOR)
 				.reviewSource(StoreType.GooglePlayStore)
 				.rating(5)
-				.title("title")
-				.productName("product")
+				.title(TITLE)
+				.productName(PRODUCT_NAME)
 				.reviewedDate(LocalDateTime.of(2024, 2, 2, 13, 7, 42))
 				.build();
 

@@ -1,5 +1,9 @@
 package com.bsha2nk.reviews.service;
 
+import static com.bsha2nk.reviews.util.Constants.AUTHOR;
+import static com.bsha2nk.reviews.util.Constants.PRODUCT_NAME;
+import static com.bsha2nk.reviews.util.Constants.REVIEW;
+import static com.bsha2nk.reviews.util.Constants.TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,7 +45,7 @@ public class ReviewsServiceTest {
 
 	@Test
 	void test_createReview() {
-		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTO();
+		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTOs().get(0);
 
 		Review review = getReviews().get(0);
 
@@ -63,7 +67,7 @@ public class ReviewsServiceTest {
 
 	@Test
 	void test_createReview_Exception() {
-		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTO();
+		ReviewRequestDTO reviewRequestDTO = getReviewRequestDTOs().get(0);
 
 		when(reviewsRepository.save(any())).thenThrow(new RuntimeException());
 
@@ -161,29 +165,48 @@ public class ReviewsServiceTest {
 		assertThrows(RuntimeException.class, () -> reviewsService.getTotalRatings());
 	}
 
-	//	@Test
+	@Test
 	void test_createMultipleReviews() {
-		ReviewRequestDTO reviewRequestDTOOne = getReviewRequestDTO();
+		List<ReviewRequestDTO> reviewRequestDTOs = getReviewRequestDTOs();
 
-		ReviewRequestDTO reviewRequestDTOTwo = ReviewRequestDTO.builder()
-				.review("review")
-				.author("author")
-				.reviewSource(StoreType.GooglePlayStore)
-				.rating(2)
-				.title("title")
-				.productName("product")
-				.reviewedDate(LocalDateTime.of(2017, 5, 4, 3, 2))
-				.build();
+		List<Review> reviews = getReviews();
 
-		List<ReviewRequestDTO> requestDTOs = List.of(reviewRequestDTOOne, reviewRequestDTOTwo);
+		when(reviewsRepository.save(any())).thenReturn(reviews.get(0)).thenReturn(reviews.get(1));
 
-		reviewsService.createMultipleReviews(requestDTOs);
+		List<ReviewResponseDTO> responseDTOs = reviewsService.createMultipleReviews(reviewRequestDTOs);
 
 		verify(reviewsRepository, times(2)).save(any());
+
+		assertEquals(reviews.get(0).getId(), responseDTOs.get(0).getId());
+		assertEquals(reviews.get(0).getReview(), responseDTOs.get(0).getReview());
+		assertEquals(reviews.get(0).getAuthor(), responseDTOs.get(0).getAuthor());
+		assertEquals(reviews.get(0).getReviewSource(), responseDTOs.get(0).getReviewSource());
+		assertEquals(reviews.get(0).getRating(), responseDTOs.get(0).getRating());
+		assertEquals(reviews.get(0).getTitle(), responseDTOs.get(0).getTitle());
+		assertEquals(reviews.get(0).getProductName(), responseDTOs.get(0).getProductName());
+		assertEquals(reviews.get(0).getReviewedDate(), responseDTOs.get(0).getReviewedDate());
+
+		assertEquals(reviews.get(1).getId(), responseDTOs.get(1).getId());
+		assertEquals(reviews.get(1).getReview(), responseDTOs.get(1).getReview());
+		assertEquals(reviews.get(1).getAuthor(), responseDTOs.get(1).getAuthor());
+		assertEquals(reviews.get(1).getReviewSource(), responseDTOs.get(1).getReviewSource());
+		assertEquals(reviews.get(1).getRating(), responseDTOs.get(1).getRating());
+		assertEquals(reviews.get(1).getTitle(), responseDTOs.get(1).getTitle());
+		assertEquals(reviews.get(1).getProductName(), responseDTOs.get(1).getProductName());
+		assertEquals(reviews.get(1).getReviewedDate(), responseDTOs.get(1).getReviewedDate());
 	}
 
-	private ReviewRequestDTO getReviewRequestDTO() {
-		return ReviewRequestDTO.builder()
+	@Test
+	void test_createMultipleReviews_Exception() {
+		List<ReviewRequestDTO> reviewRequestDTOs = getReviewRequestDTOs();
+
+		when(reviewsRepository.save(any())).thenThrow(new RuntimeException());
+
+		assertThrows(RuntimeException.class, () -> reviewsService.createMultipleReviews(reviewRequestDTOs));
+	}
+
+	private List<ReviewRequestDTO> getReviewRequestDTOs() {
+		ReviewRequestDTO reviewRequestDTOOne = ReviewRequestDTO.builder()
 				.review("Pero deberia de poder cambiarle el idioma a alexa")
 				.author("WarcryxD")
 				.reviewSource(StoreType.iTunes)
@@ -192,6 +215,18 @@ public class ReviewsServiceTest {
 				.productName("Amazon Alexa")
 				.reviewedDate(LocalDateTime.of(2017, 1, 2, 4, 5))
 				.build();
+
+		ReviewRequestDTO reviewRequestDTOTwo = ReviewRequestDTO.builder()
+				.review(REVIEW)
+				.author(AUTHOR)
+				.reviewSource(StoreType.GooglePlayStore)
+				.rating(2)
+				.title(TITLE)
+				.productName(PRODUCT_NAME)
+				.reviewedDate(LocalDateTime.of(2017, 5, 4, 3, 2))
+				.build();
+
+		return List.of(reviewRequestDTOOne, reviewRequestDTOTwo);
 	}
 
 	private List<Review> getReviews() {
@@ -208,12 +243,12 @@ public class ReviewsServiceTest {
 
 		Review reviewTwo = Review.builder()
 				.id(2)
-				.review("review")
-				.author("author")
+				.review(REVIEW)
+				.author(AUTHOR)
 				.reviewSource(StoreType.GooglePlayStore)
 				.rating(5)
-				.title("title")
-				.productName("product")
+				.title(TITLE)
+				.productName(PRODUCT_NAME)
 				.reviewedDate(LocalDateTime.of(2024, 2, 2, 13, 7, 42))
 				.build();
 
