@@ -1,4 +1,0 @@
-1. iTunes and GooglePlayStore are the only stores and no new store name will be added by reviewer. Hardcoded stores as enums.
-2. Considered ratings to be whole numbers hence using integer data type.
-3. Rounding off average rating value to 2 decimal places.
-4. In Search reviews with date filter, need to input date and time and not just date.
